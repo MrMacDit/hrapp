@@ -2,8 +2,11 @@ pipeline {
     agent any
         environment{
             REPOSITORY_NAME = "hrapp"
-            AWS_REGION = "eu-west-1"
+            AWS_REGION = credentials('AWS_REGION')
             ECR_REGISTRY = credentials('ECR_REGISTRY')
+            AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+            AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+
         }
     stages {
         stage('Hello') {
