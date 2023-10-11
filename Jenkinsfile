@@ -25,9 +25,7 @@ pipeline {
                 echo 'Check Pushing Image to DockerHub'
                 sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
                 echo 'Tagging image'
-                sh "
-                    docker tag ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ${ECR_REGISTRY}:${BRANCH_NAME}_${BUILD_NUMBER}
-                "
+                sh "docker tag ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ${ECR_REGISTRY}:${BRANCH_NAME}_${BUILD_NUMBER}"
                 echo 'Tagging successful'
                 sh 'docker push ${ECR_REGISTRY}:${BRANCH_NAME}_${BUILD_NUMBER}'
             }
