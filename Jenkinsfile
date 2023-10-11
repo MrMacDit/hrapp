@@ -27,6 +27,7 @@ pipeline {
                 echo 'Tagging image'
                 sh """
                     docker tag ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER}
+                    echo successfully tagged
                     docker push ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER}
                 """
             }
