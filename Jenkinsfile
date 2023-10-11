@@ -12,7 +12,10 @@ pipeline {
         stage('Building Docker Image') {
             steps {
                 echo 'Shout out to the creation of our docker image'
-                sh "docker build -t ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ."
+                sh """
+                sudo dockerd
+                sudo docker build -t ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} .
+                """
                 echo 'Build success'
             }
         }
