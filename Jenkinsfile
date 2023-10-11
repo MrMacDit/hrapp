@@ -1,7 +1,7 @@
 pipeline {
     agent any
         environment{
-            REPOSITORY_NAME = "hrappTolu"
+            REPOSITORY_NAME = "hrapp"
         }
     stages {
         stage('Hello') {
