@@ -39,7 +39,7 @@ pipeline {
                     docker pull ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}
                     docker save -o /tmp/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}
                     scp -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /tmp/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar ec2-user@${EC2_INSTANCE}:~/path/to/destination
-                    ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE} 'docker load -i /path/to/destination/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar'
+                    ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE} 'docker load -i ~/path/to/destination/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar'
                     ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE} 'docker run -d -p 80:5000 -e POSTGRES_DATABASE_NAME=${POSTGRES_DATABASE_NAME} -e POSTGRES_HOST=${POSTGRES_HOST} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_USER=${POSTGRES_USER} ${REPOSITORY_NAME}:${BUILD_NUMBER}'
                 """
             }
