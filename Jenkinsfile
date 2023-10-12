@@ -7,7 +7,7 @@ pipeline {
             ECR_REGISTRY = credentials('ECR_REGISTRY')
             AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
             AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-            SSH_KEY
+            SSH_KEY = credentials('SSH_KEY')
 
         }
     stages {
