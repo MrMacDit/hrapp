@@ -24,7 +24,7 @@ pipeline {
                     docker build -t ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} .
                     docker tag ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}
                     docker push ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}
-                    scp -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER} ec2-user@${EC2_INSTANCE}:/path/to/destination
+                    scp -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ec2-user@${EC2_INSTANCE}:/path/to/destination
                 """
             }
         }
