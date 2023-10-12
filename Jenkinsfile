@@ -14,20 +14,15 @@ pipeline {
                 echo 'Hello World'
             }
         }
-        stage('Building Docker Image') {
-            steps {
-                echo 'Shout out to the creation of our docker image'
-                sh "docker build -t ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ."
-            }
-        }
         stage('Pushing Image to ECR') {
             steps {
                 echo 'Check Pushing Image to ECR'
-                sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
-                echo 'Tagging image'
-                sh "docker tag ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ${ECR_REGISTRY}:${BRANCH_NAME}_${BUILD_NUMBER}"
-                echo 'Tagging successful'
-                sh "docker push ${ECR_REGISTRY}:${BRANCH_NAME}_${BUILD_NUMBER}"
+                sh """
+                    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                    docker build -t ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} .
+                    docker tag ${REPOSITORY_NAME}:${BRANCH_NAME}_${BUILD_NUMBER} ${ECR_REGISTRY}/${BRANCH_NAME}:${BUILD_NUMBER}
+                    docker push ${ECR_REGISTRY}/${BRANCH_NAME}:${BUILD_NUMBER}
+                """
             }
         }
     } 
