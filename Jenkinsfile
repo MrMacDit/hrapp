@@ -12,9 +12,6 @@ pipeline {
             POSTGRES_DATABASE_NAME = credentials('POSTGRES_DATABASE_NAME')
             POSTGRES_PASSWORD = credentials('POSTGRES_PASSWORD')
             POSTGRES_USER = credentials('POSTGRES_USER')
-            AWS_REGION_NAME = credentials('AWS_REGION')
-            AWS_ACCESS_NAME = credentials('AWS_ACCESS_KEY_ID')
-            AWS_KEY_NAME = credentials('AWS_SECRET_ACCESS_KEY')
 
         }
     stages {

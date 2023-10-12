@@ -26,9 +26,9 @@ db = SQLAlchemy(app)
 
 client = boto3.client(
     'ses', 
-    region_name= os.environ.get("AWS_REGION_NAME"),
-    aws_access_key_id = os.environ.get("AWS_ACCESS_NAME"),
-    aws_secret_access_key = os.environ.get("AWS_KEY_NAME")
+    region_name= os.environ.get("AWS_REGION"),
+    aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
 )
 
 
