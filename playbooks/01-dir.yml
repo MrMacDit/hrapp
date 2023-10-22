@@ -1,0 +1,10 @@
+---
+- name: Create a Folder on EC2
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create a directory
+      file:
+        path: /path/to/destination
+        state: directory
+        mode: "0755"

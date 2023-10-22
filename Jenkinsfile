@@ -2,7 +2,7 @@ pipeline {
     agent any
         environment{
             REPOSITORY_NAME = "hrapp"
-            EC2_INSTANCE = "54.74.245.216"
+            EC2_INSTANCE = "3.254.116.177"
             AWS_REGION = credentials('AWS_REGION')
             ECR_REGISTRY = credentials('ECR_REGISTRY')
             AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -20,7 +20,16 @@ pipeline {
                 echo 'Hello World'
             }
         }
-        stage('Create and push image to ECR and EC2') {
+        stage ('Use Ansible to provision Docker and folders') {
+            steps {
+            echo 'Dynamically provisioning Docker into AWS Machines'
+                sh """
+                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --key-file ${SSH_KEY} 02-docker.yml -u ec2-user
+                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --key-file ${SSH_KEY} 01-dir.yml -u ec2-user
+                """
+            }
+        }
+        stage('Create and push image to ECR') {
             steps {
                 echo 'Check Pushing Image to ECR'
                 sh """
