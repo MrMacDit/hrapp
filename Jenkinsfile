@@ -24,8 +24,8 @@ pipeline {
             steps {
             echo 'Dynamically provisioning Docker into AWS Machines'
                 sh """
-                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --key-file ${SSH_KEY} 02-docker.yml -u ec2-user
-                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --key-file ${SSH_KEY} 01-dir.yml -u ec2-user
+                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --key-file ${SSH_KEY} playbooks/02-docker.yml -u ec2-user
+                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i hosts --key-file ${SSH_KEY} playbooks/01-dir.yml -u ec2-user
                 """
             }
         }
@@ -47,6 +47,7 @@ pipeline {
                     aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
                     docker pull ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}
                     docker save -o /tmp/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}
+                    systemctl start docker
                     scp -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /tmp/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar ec2-user@${EC2_INSTANCE}:~/path/to/destination
                     ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE} 'docker load -i ~/path/to/destination/${REPOSITORY_NAME}:${BUILD_NUMBER}.tar'
                     ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE} 'docker run -d -p 80:5000 -e POSTGRES_DATABASE_NAME=${POSTGRES_DATABASE_NAME} -e POSTGRES_HOST=${POSTGRES_HOST} -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -e POSTGRES_USER=${POSTGRES_USER} -e AWS_REGION_NAME=${AWS_REGION} -e AWS_ACCESS_NAME=${AWS_ACCESS_KEY_ID} -e AWS_KEY_NAME=${AWS_SECRET_ACCESS_KEY} ${ECR_REGISTRY}/${REPOSITORY_NAME}:${BUILD_NUMBER}'
