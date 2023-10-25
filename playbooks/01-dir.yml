@@ -5,6 +5,6 @@
   tasks:
     - name: Create a directory
       file:
-        path: /path/to/destination
+        path: path/to/destination
         state: directory
         mode: "0755"
