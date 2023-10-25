@@ -2,7 +2,7 @@ pipeline {
     agent any
         environment{
             REPOSITORY_NAME = "hrapp"
-            EC2_INSTANCE = "34.244.183.46"
+            EC2_INSTANCE = "3.252.136.137"
             AWS_REGION = credentials('AWS_REGION')
             ECR_REGISTRY = credentials('ECR_REGISTRY')
             AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
