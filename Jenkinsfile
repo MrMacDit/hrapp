@@ -30,6 +30,12 @@ pipeline {
                 """
             }
         }
+        stage('Shell to execute Prometheus') {
+            steps {
+                echo "Run prometheus"
+                sh './prometheus_script.sh https://github.com/prometheus/prometheus/releases/download/v2.47.2/prometheus-2.47.2.linux-amd64.tar.gz ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE}'
+            }
+        }
         stage('Create and push image to ECR') {
             steps {
                 echo 'Check Pushing Image to ECR'
