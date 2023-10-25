@@ -25,7 +25,6 @@ pipeline {
             steps {
             echo 'Dynamically provisioning Docker into AWS Machines'
                 sh """
-                git clone https://github.com/MrMacDit/hrapp.git
                 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible_hosts --key-file ${SSH_KEY} playbooks/02-docker.yml -u ec2-user
                 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible_hosts --key-file ${SSH_KEY} playbooks/01-dir.yml -u ec2-user
                 """
