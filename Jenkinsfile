@@ -2,7 +2,7 @@ pipeline {
     agent any
         environment{
             REPOSITORY_NAME = "hrapp"
-            EC2_INSTANCE = "3.252.136.137"
+            EC2_INSTANCE = "3.252.51.232"
             AWS_REGION = credentials('AWS_REGION')
             ECR_REGISTRY = credentials('ECR_REGISTRY')
             AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -30,12 +30,7 @@ pipeline {
                 """
             }
         }
-        stage('Shell to execute Prometheus') {
-            steps {
-                echo "Run prometheus"
-                sh './prometheus_script.sh https://github.com/prometheus/prometheus/releases/download/v2.47.2/prometheus-2.47.2.linux-amd64.tar.gz ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE}'
-            }
-        }
+        
         stage('Create and push image to ECR') {
             steps {
                 echo 'Check Pushing Image to ECR'
