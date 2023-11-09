@@ -33,7 +33,8 @@ pipeline {
                 sh """  
                     ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE}
                     cd node_exporter-1.6.1.linux-amd64
-                    ./node_exporter
+                    ./node_exporter &
+                    kill -INT 888
                 """
             }
         }
