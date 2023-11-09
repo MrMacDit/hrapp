@@ -2,7 +2,7 @@ pipeline {
     agent any
         environment{
             REPOSITORY_NAME = "hrapp"
-            EC2_INSTANCE = "3.252.51.232"
+            EC2_INSTANCE = "3.249.109.95"
             AWS_REGION = credentials('AWS_REGION')
             ECR_REGISTRY = credentials('ECR_REGISTRY')
             AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -21,16 +21,22 @@ pipeline {
                 sh 'ansible --version'
             }
         }
-        stage ('Use Ansible to provision Docker and folders') {
+        stage('Install && start Node Exporter') {
             steps {
-            echo 'Dynamically provisioning Docker into AWS Machines'
-                sh """
-                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible_hosts --key-file ${SSH_KEY} playbooks/02-docker.yml -u ec2-user
-                ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible_hosts --key-file ${SSH_KEY} playbooks/01-dir.yml -u ec2-user
+                echo 'Installing Node exporter'
+                sh """  
+                    ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE}
+                    wget https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+                    tar xvfz node_exporter-1.6.1.linux-amd64.tar.gz
+                """
+                echo 'Start your exporter'
+                sh """  
+                    ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${EC2_INSTANCE}
+                    cd node_exporter-1.6.1.linux-amd64
+                    ./node_exporter
                 """
             }
         }
-        
         stage('Create and push image to ECR') {
             steps {
                 echo 'Check Pushing Image to ECR'
