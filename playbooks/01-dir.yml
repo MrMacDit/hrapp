@@ -1,7 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: create directory
-      file:
-        path: "path/to/destination"
-        state: directory
